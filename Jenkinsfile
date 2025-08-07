@@ -40,10 +40,22 @@ pipeline {
                 }
             }
         }
+        
+        stage("Validate AWS Credentials") {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',credentialsId: 'aws_credentials']]) {
+                    sh '''
+                        echo "Validating AWS credentials..."
+                        aws sts get-caller-identity
+                    '''
+                }
+            }
 
-        stage("Create Minikube Cluster with Terraform") {
+
+        stage("Create EKS Cluster with Terraform files") {
             steps {
                 dir("terraform") {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',credentialsId: 'aws_credentials']])
                     sh """
                         terraform init
                         terraform plan
