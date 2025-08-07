@@ -50,6 +50,7 @@ pipeline {
                     '''
                 }
             }
+        }
 
 
         stage("Create EKS Cluster with Terraform files") {
