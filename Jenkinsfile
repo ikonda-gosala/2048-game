@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "yourdockerhub/2048-game:latest"
+        DOCKER_IMAGE = "konda33/2048-game:latest"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
-        GIT_REPO_DOCKER = "https://github.com/your-org/2048-docker-repo.git"
-        GIT_REPO_TERRAFORM = "https://github.com/your-org/minikube-terraform.git"
-        GIT_REPO_K8S = "https://github.com/your-org/2048-k8s-deployment.git"
+        GIT_REPO_DOCKER = "https://github.com/ikonda-gosala/2048-game.git"
+        GIT_REPO_TERRAFORM = "https://github.com/ikonda-gosala/2048-game-tf-files.git"
+        GIT_REPO_K8S = "https://github.com/ikonda-gosala/2048-game-k8s.git"
     }
 
     stages {
