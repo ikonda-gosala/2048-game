@@ -56,12 +56,13 @@ pipeline {
         stage("Create EKS Cluster with Terraform files") {
             steps {
                 dir("terraform") {
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',credentialsId: 'aws_credentials']])
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',credentialsId: 'aws_credentials']]){
                     sh """
                         terraform init
                         terraform plan
                         terraform apply --auto-approve
                     """
+                    }
                 }
             }
         }
