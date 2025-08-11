@@ -4,7 +4,7 @@ pipeline {
     environment {
         EKS_CLUSTER_NAME = "my_cluster"
         AWS_REGION = "us-east-1"
-        DOCKER_IMAGE = "konda33/2048-game:${BUILD_NUMBER}"
+        DOCKER_IMAGE = "konda33/2048-game:latest"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
         AWS_CREDENTIALS = "aws_credentials"
         GIT_REPO_DOCKER = "https://github.com/ikonda-gosala/2048-game.git"
@@ -100,7 +100,7 @@ pipeline {
                         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
                         export AWS_DEFAULT_REGION=${AWS_REGION}
                         
-                        sed -i 's|konda33/2048-game:\\$\\{BUILD_NUMBER\\}|konda33/2048-game:${BUILD_NUMBER}|g' deployment.yaml
+                        #sed -i 's|konda33/2048-game:\\$\\{BUILD_NUMBER\\}|konda33/2048-game:${BUILD_NUMBER}|g' deployment.yaml
                     
                         kubectl apply -f deployment.yaml
                         kubectl apply -f service.yaml
