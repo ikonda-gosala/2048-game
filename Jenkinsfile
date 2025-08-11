@@ -99,9 +99,7 @@ pipeline {
                         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
                         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
                         export AWS_DEFAULT_REGION=${AWS_REGION}
-                        
-                        #sed -i 's|konda33/2048-game:\\$\\{BUILD_NUMBER\\}|konda33/2048-game:${BUILD_NUMBER}|g' deployment.yaml
-                    
+                
                         kubectl apply -f deployment.yaml
                         kubectl apply -f service.yaml
                     """
