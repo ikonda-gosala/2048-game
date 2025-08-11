@@ -69,11 +69,17 @@ pipeline {
                 }
             }
         }
-        stage("Update the kubeconfig command."){
-            steps{
+        stage("Update the kubeconfig command.") {
+        steps {
+            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${AWS_CREDENTIALS}"]]) {
                 sh """
-                    aws eks --region "${AWS_REGION}" update-kubeconfig --name ${EKS_CLUSTER_NAME}
+                    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                    export AWS_DEFAULT_REGION=${AWS_REGION}
+                    aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}
+                    kubectl get nodes
                 """
+                }
             }
         }
 
