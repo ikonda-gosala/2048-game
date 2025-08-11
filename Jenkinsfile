@@ -92,12 +92,17 @@ pipeline {
         }
 
         stage("Apply Kubernetes Manifests") {
-            steps {
+        steps {
+            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "${AWS_CREDENTIALS}"]]) {
                 dir("k8s") {
                     sh """
+                        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                        export AWS_DEFAULT_REGION=${AWS_REGION}
                         kubectl apply -f deployment.yaml
                         kubectl apply -f service.yaml
                     """
+                    }
                 }
             }
         }
