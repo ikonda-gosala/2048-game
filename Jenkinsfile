@@ -2,8 +2,11 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "konda33/2048-game:latest"
+        EKS_CLUSTER_NAME = "my_cluster"
+        AWS_REGION = "us-east-1"
+        DOCKER_IMAGE = "konda33/2048-game:${BUILD_NUMBER}"
         DOCKER_CREDENTIALS_ID = "dockerhub-credentials"
+        AWS_CREDENTIALS = "aws_credentials"
         GIT_REPO_DOCKER = "https://github.com/ikonda-gosala/2048-game.git"
         GIT_REPO_TERRAFORM = "https://github.com/ikonda-gosala/2048-game-tf-files.git"
         GIT_REPO_K8S = "https://github.com/ikonda-gosala/2048-game-k8s.git"
@@ -56,7 +59,7 @@ pipeline {
         stage("Create EKS Cluster with Terraform files") {
             steps {
                 dir("terraform") {
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',credentialsId: 'aws_credentials']]){
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',credentialsId: "${AWS_CREDENTIALS}" ]]){
                     sh """
                         terraform init
                         terraform plan
@@ -64,6 +67,13 @@ pipeline {
                     """
                     }
                 }
+            }
+        }
+        stage("Update the kubeconfig command."){
+            steps{
+                sh """
+                    aws eks --region "${AWS_REGION}" update-kubeconfig --name ${EKS_CLUSTER_NAME}
+                """
             }
         }
 
